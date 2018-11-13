@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Никита Швец](https://up.htmlacademy.ru/javascript/16/user/595607).
-* Наставник: `Неизвестно`.
+* Наставник: [Роман Мисюрин](https://htmlacademy.ru/profile/lunaticus).
 
 ---
 
