@@ -1,23 +1,23 @@
 'use strict';
 
 var TITLES_APPARTEMENT = [
-  "Большая уютная квартира",
-  "Маленькая неуютная квартира",
-  "Огромный прекрасный дворец",
-  "Маленький ужасный дворец",
-  "Красивый гостевой домик",
-  "Некрасивый негостеприимный домик",
-  "Уютное бунгало далеко от моря",
-  "Неуютное бунгало по колено в воде"
+  'Большая уютная квартира',
+  'Маленькая неуютная квартира',
+  'Огромный прекрасный дворец',
+  'Маленький ужасный дворец',
+  'Красивый гостевой домик',
+  'Некрасивый негостеприимный домик',
+  'Уютное бунгало далеко от моря',
+  'Неуютное бунгало по колено в воде'
 ];
 
 var FEATURES_APPARTEMENT = [
-  "wifi",
-  "dishwasher",
-  "parking",
-  "washer",
-  "elevator",
-  "conditioner"
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner'
 ];
 
 var TYPES_APPARTEMENT = [
@@ -55,15 +55,13 @@ var MAX_GUESTS = 10;
 var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
 var MIN_LOCATION_X = 10;
-var MAX_LOCATION_X = 1190
-var PIN_WIDTH = 50;
-var PIN_HEIGHT = 70;
+var MAX_LOCATION_X = 1190;
 var adsCount = 8;
 var generatedArrayAds = [];
 
 var generateRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
-}
+};
 
 var getRandomElement = function (array) {
   var render = Math.floor(Math.random() * array.length);
@@ -78,15 +76,15 @@ var shuffleArray = function (array) {
     array[j] = temp;
   }
   return array;
-}
+};
 
 var getRandomLengthArray = function (array) {
   return array.slice(0, generateRandomNumber(1, array.length));
-}
+};
 
 var generateAds = function (index) {
   var locationX = generateRandomNumber(MIN_LOCATION_X, MAX_LOCATION_X);
-  var locationY = generateRandomNumber(MIN_LOCATION_Y, MAX_LOCATION_Y)
+  var locationY = generateRandomNumber(MIN_LOCATION_Y, MAX_LOCATION_Y);
 
   var object = {
     author: {
@@ -111,9 +109,9 @@ var generateAds = function (index) {
       x: locationX,
       y: locationY
     }
-  }
+  };
   return object;
-}
+};
 
 var createAdsList = function () {
   for (var i = 0; i < adsCount; i++) {
@@ -127,7 +125,7 @@ createAdsList();
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
 
-var mapPins= document.querySelector('.map__pins');
+var mapPins = document.querySelector('.map__pins');
 
 var makeElement = function (tagName, className, text) {
   var element = document.createElement(tagName);
@@ -152,7 +150,7 @@ var createPins = function (element) {
   item.appendChild(image);
 
   return item;
-}
+};
 
 var renderPins = function () {
   var pins = document.createDocumentFragment();
@@ -161,7 +159,7 @@ var renderPins = function () {
     pins.appendChild(createPins(generatedArrayAds[i]));
   }
   return pins;
-}
+};
 
 mapPins.appendChild(renderPins());
 
@@ -174,7 +172,7 @@ var createFeatures = function (array) {
     feature.appendChild(featuresItem);
   }
   return feature;
-}
+};
 
 var createPhotos = function (array) {
   var photo = document.createDocumentFragment();
@@ -191,9 +189,8 @@ var createPhotos = function (array) {
   }
 
   return photo;
-}
+};
 
-var map = document.querySelector('.map');
 var adCard = document.querySelector('#card').content.querySelector('.map__card');
 
 var createAds = function (element) {
@@ -213,15 +210,6 @@ var createAds = function (element) {
   ad.querySelector('.popup__photos').appendChild(createPhotos(element.offer.photos));
 
   return ad;
-}
-
-var renderAds = function () {
-  var ads = document.createDocumentFragment();
-
-  for (var i = 0; i < adsCount; i++) {
-    ads.appendChild(createAds(generatedArrayAds[i]));
-  }
-  return ads;
-}
+};
 
 map.insertBefore(createAds(generatedArrayAds[generateRandomNumber(0, generatedArrayAds.length - 1)]), map.querySelector('.map__filters-container'));
