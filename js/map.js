@@ -56,6 +56,8 @@ var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
 var MIN_LOCATION_X = 10;
 var MAX_LOCATION_X = 1190;
+var IMAGE_WIDTH = 40;
+var IMAGE_HEIGHT = 40;
 var adsCount = 8;
 var generatedArrayAds = [];
 
@@ -123,7 +125,13 @@ var createAdsList = function () {
 createAdsList();
 
 var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+
+var classRemove = function (domElement, domElementClassRemove) {
+  domElement.classList.remove(domElementClassRemove);
+  return domElement;
+};
+
+classRemove(map, 'map--faded');
 
 var mapPins = document.querySelector('.map__pins');
 
@@ -143,8 +151,8 @@ var createPins = function (element) {
 
   var image = makeElement('img');
   image.src = element.author.avatar;
-  image.width = 40;
-  image.height = 40;
+  image.width = IMAGE_WIDTH;
+  image.height = IMAGE_HEIGHT;
   image.draggable = false;
   image.alt = element.author.title;
   item.appendChild(image);
@@ -212,4 +220,7 @@ var createAds = function (element) {
   return ad;
 };
 
-map.insertBefore(createAds(generatedArrayAds[generateRandomNumber(0, generatedArrayAds.length - 1)]), map.querySelector('.map__filters-container'));
+var randomRenderAd = createAds(generatedArrayAds[generateRandomNumber(0, generatedArrayAds.length - 1)]);
+var mapFilters = document.querySelector('.map__filters-container');
+
+map.insertBefore(randomRenderAd, mapFilters);
