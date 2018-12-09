@@ -154,7 +154,7 @@ var createPins = function (element) {
   image.width = IMAGE_WIDTH;
   image.height = IMAGE_HEIGHT;
   image.draggable = false;
-  image.alt = element.author.title;
+  image.alt = element.offer.title;
   item.appendChild(image);
 
   return item;
