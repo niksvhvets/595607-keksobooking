@@ -58,7 +58,7 @@ var MIN_LOCATION_X = 10;
 var MAX_LOCATION_X = 1190;
 var IMAGE_WIDTH = 40;
 var IMAGE_HEIGHT = 40;
-var adsCount = 8;
+var ADS_COUNT = 8;
 var generatedArrayAds = [];
 
 var generateRandomNumber = function (min, max) {
@@ -66,8 +66,8 @@ var generateRandomNumber = function (min, max) {
 };
 
 var getRandomElement = function (array) {
-  var render = Math.floor(Math.random() * array.length);
-  return array[render];
+  var randomElement = Math.floor(Math.random() * array.length);
+  return array[randomElement];
 };
 
 var shuffleArray = function (array) {
@@ -116,7 +116,7 @@ var generateAds = function (index) {
 };
 
 var createAdsList = function () {
-  for (var i = 0; i < adsCount; i++) {
+  for (var i = 0; i < ADS_COUNT; i++) {
     generatedArrayAds.push(generateAds(i));
   }
   return generatedArrayAds;
@@ -163,7 +163,7 @@ var createPins = function (element) {
 var renderPins = function () {
   var pins = document.createDocumentFragment();
 
-  for (var i = 0; i < adsCount; i++) {
+  for (var i = 0; i < ADS_COUNT; i++) {
     pins.appendChild(createPins(generatedArrayAds[i]));
   }
   return pins;
@@ -189,8 +189,8 @@ var createPhotos = function (array) {
     var photoItem = document.createElement('img');
     photoItem.className = 'popup_photo';
     photoItem.src = array[i];
-    photoItem.width = 45;
-    photoItem.height = 40;
+    photoItem.width = IMAGE_WIDTH;
+    photoItem.height = IMAGE_HEIGHT;
     photoItem.alt = 'Фотография жилья';
 
     photo.appendChild(photoItem);
