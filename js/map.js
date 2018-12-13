@@ -60,8 +60,9 @@ var IMAGE_WIDTH = 40;
 var IMAGE_HEIGHT = 40;
 var ADS_COUNT = 8;
 var generatedArrayAds = [];
-var ENABLED_STATUS = false;
-var DISABLED_STATUS = true;
+var ENABLED_MAP_STATE = false;
+var DISABLED_MAP_STATE = true;
+var ESC_BUTTON = 27;
 
 var generateRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -212,6 +213,17 @@ var createAds = function (element) {
 
   var popupCloseClickHandler = function () {
     map.querySelector('.map__card').remove();
+
+    ad.addEventListener('keydown', function () {
+      map.querySelector('.map__card').remove();
+    });
+  };
+
+  var popupCloseEscButton = function (evt) {
+    if (evt.keyCode === ESC_BUTTON) {
+      map.querySelector('.map__card').remove();
+      document.removeEventListener('keydown', popupCloseEscButton);
+    }
   };
 
   ad.querySelector('img').src = element.author.avatar;
@@ -228,6 +240,7 @@ var createAds = function (element) {
   ad.querySelector('.popup__photos').appendChild(createPhotos(element.offer.photos));
 
   ad.querySelector('.popup__close').addEventListener('click', popupCloseClickHandler);
+  document.addEventListener('keydown', popupCloseEscButton);
 
   return ad;
 };
@@ -243,25 +256,25 @@ var adForm = document.querySelector('.ad-form');
 var formFieldset = document.querySelectorAll('fieldset');
 var inputAddress = document.querySelector('#address');
 
-var setStatusForm = function (status) {
+var setAvailabilityForm = function (state) {
   for (var i = 0; i < formFieldset.length; i++) {
-    formFieldset[i].disabled = status;
+    formFieldset[i].disabled = state;
   }
 };
 
-var setAddressCoordinats = function () {
+var getCoordinatesAddress = function () {
   return Math.floor(mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(mapPinMain.offsetTop + mapPinMain.offsetHeight / 2);
 };
 
-var mapPinMouseupHandler = function () {
+var mapPinMouseUpHandler = function () {
   classRemove(map, 'map--faded');
   classRemove(adForm, 'ad-form--disabled');
-  setStatusForm(ENABLED_STATUS);
-  inputAddress.value = setAddressCoordinats();
+  setAvailabilityForm(ENABLED_MAP_STATE);
+  inputAddress.value = getCoordinatesAddress();
   if (map.querySelectorAll('.map__pin').length < 9) {
     mapPins.appendChild(renderPins());
   }
 };
 
-setStatusForm(DISABLED_STATUS);
-mapPinMain.addEventListener('mouseup', mapPinMouseupHandler);
+setAvailabilityForm(DISABLED_MAP_STATE);
+mapPinMain.addEventListener('mouseup', mapPinMouseUpHandler);
