@@ -160,7 +160,7 @@ var createPins = function (element) {
 
   var pinElementClickHandler = function () {
     if (map.querySelector('.map__card') !== null) {
-      map.querySelector('.map__card').remove();
+      removeDomElement('.map__card');
     }
     showAd(element);
   };
@@ -212,16 +212,18 @@ var createAds = function (element) {
   var ad = adCard.cloneNode(true);
 
   var popupCloseClickHandler = function () {
-    map.querySelector('.map__card').remove();
+    removeDomElement('.map__card');
+    document.removeEventListener('.click', popupCloseEscButton);
 
     ad.addEventListener('keydown', function () {
-      map.querySelector('.map__card').remove();
+      removeDomElement('.map__card');
+      document.removeEventListener('keydown', popupCloseEscButton);
     });
   };
 
   var popupCloseEscButton = function (evt) {
     if (evt.keyCode === ESC_BUTTON) {
-      map.querySelector('.map__card').remove();
+      removeDomElement('.map__card');
       document.removeEventListener('keydown', popupCloseEscButton);
     }
   };
@@ -249,6 +251,10 @@ var mapFilters = document.querySelector('.map__filters-container');
 
 var showAd = function (ad) {
   map.insertBefore(createAds(ad), mapFilters);
+};
+
+var removeDomElement = function (element) {
+  map.querySelector(element).remove();
 };
 
 var mapPinMain = document.querySelector('.map__pin--main');
