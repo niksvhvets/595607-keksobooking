@@ -60,6 +60,9 @@ var IMAGE_WIDTH = 40;
 var IMAGE_HEIGHT = 40;
 var ADS_COUNT = 8;
 var generatedArrayAds = [];
+var ENABLED_MAP_STATE = false;
+var DISABLED_MAP_STATE = true;
+var ESC_BUTTON = 27;
 
 var generateRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -131,8 +134,6 @@ var classRemove = function (domElement, domElementClassRemove) {
   return domElement;
 };
 
-classRemove(map, 'map--faded');
-
 var mapPins = document.querySelector('.map__pins');
 
 var makeElement = function (tagName, className, text) {
@@ -157,6 +158,14 @@ var createPins = function (element) {
   image.alt = element.offer.title;
   item.appendChild(image);
 
+  var pinElementClickHandler = function () {
+    if (map.querySelector('.map__card') !== null) {
+      removeDomElement('.map__card');
+    }
+    showAd(element);
+  };
+
+  item.addEventListener('click', pinElementClickHandler);
   return item;
 };
 
@@ -168,8 +177,6 @@ var renderPins = function () {
   }
   return pins;
 };
-
-mapPins.appendChild(renderPins());
 
 var createFeatures = function (array) {
   var feature = document.createDocumentFragment();
@@ -187,7 +194,7 @@ var createPhotos = function (array) {
 
   for (var i = 0; i < array.length; i++) {
     var photoItem = document.createElement('img');
-    photoItem.className = 'popup_photo';
+    photoItem.classList.add('popup__photo');
     photoItem.src = array[i];
     photoItem.width = IMAGE_WIDTH;
     photoItem.height = IMAGE_HEIGHT;
@@ -204,6 +211,23 @@ var adCard = document.querySelector('#card').content.querySelector('.map__card')
 var createAds = function (element) {
   var ad = adCard.cloneNode(true);
 
+  var popupCloseClickHandler = function () {
+    removeDomElement('.map__card');
+    document.removeEventListener('.click', popupCloseEscButton);
+
+    ad.addEventListener('keydown', function () {
+      removeDomElement('.map__card');
+      document.removeEventListener('keydown', popupCloseEscButton);
+    });
+  };
+
+  var popupCloseEscButton = function (evt) {
+    if (evt.keyCode === ESC_BUTTON) {
+      removeDomElement('.map__card');
+      document.removeEventListener('keydown', popupCloseEscButton);
+    }
+  };
+
   ad.querySelector('img').src = element.author.avatar;
   ad.querySelector('.popup__title').textContent = element.author.title;
   ad.querySelector('.popup__text--address').textContent = element.author.address;
@@ -217,10 +241,46 @@ var createAds = function (element) {
   ad.querySelector('.popup__photos').innerHTML = '';
   ad.querySelector('.popup__photos').appendChild(createPhotos(element.offer.photos));
 
+  ad.querySelector('.popup__close').addEventListener('click', popupCloseClickHandler);
+  document.addEventListener('keydown', popupCloseEscButton);
+
   return ad;
 };
 
-var randomRenderAd = createAds(generatedArrayAds[generateRandomNumber(0, generatedArrayAds.length - 1)]);
 var mapFilters = document.querySelector('.map__filters-container');
 
-map.insertBefore(randomRenderAd, mapFilters);
+var showAd = function (ad) {
+  map.insertBefore(createAds(ad), mapFilters);
+};
+
+var removeDomElement = function (element) {
+  map.querySelector(element).remove();
+};
+
+var mapPinMain = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var formFieldset = document.querySelectorAll('fieldset');
+var inputAddress = document.querySelector('#address');
+
+var setAvailabilityForm = function (state) {
+  for (var i = 0; i < formFieldset.length; i++) {
+    formFieldset[i].disabled = state;
+  }
+};
+
+var getCoordinatesAddress = function () {
+  return Math.floor(mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(mapPinMain.offsetTop + mapPinMain.offsetHeight / 2);
+};
+
+var mapPinMouseUpHandler = function () {
+  classRemove(map, 'map--faded');
+  classRemove(adForm, 'ad-form--disabled');
+  setAvailabilityForm(ENABLED_MAP_STATE);
+  inputAddress.value = getCoordinatesAddress();
+  if (map.querySelectorAll('.map__pin').length < 9) {
+    mapPins.appendChild(renderPins());
+  }
+};
+
+setAvailabilityForm(DISABLED_MAP_STATE);
+mapPinMain.addEventListener('mouseup', mapPinMouseUpHandler);
