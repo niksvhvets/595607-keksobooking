@@ -284,3 +284,67 @@ var mapPinMouseUpHandler = function () {
 
 setAvailabilityForm(DISABLED_MAP_STATE);
 mapPinMain.addEventListener('mouseup', mapPinMouseUpHandler);
+
+var form = document.querySelector('form');
+var adTitle = adForm.querySelector('[name=title]');
+var adPrice = adForm.querySelector('[name=price]');
+
+var titleAlertMinLength = 'Заголовок объявления должен состоять минимум из 20-х символов';
+var titleAlertMaxLength = 'Заголовок объявления не должно превышать 100 символов';
+
+var priceAlertMinValue = 'Минимальная цена за ночь должна быть минимум ' + MIN_PRICE + ' руб.';
+var priceAlertMaxValue = 'Максимальная цена за ночь должна быть максимум ' + MAX_PRICE + ' руб.';
+
+var checkInputValidity = function (checkValue, firstAlert, secondAlert) {
+  checkValue.addEventListener('invalid', function () {
+    if (checkValue.validity.tooShort) {
+      checkValue.setCustomValidity(firstAlert);
+    } else if (checkValue.validity.tooLong) {
+      checkValue.setCustomValidity(secondAlert);
+    } else if (checkValue.validity.valueMissing) {
+      checkValue.setCustomValidity('Обязательное поле');
+    } else {
+      checkValue.setCustomValidity('');
+    }
+  });
+};
+
+form.addEventListener('submit', function () {
+  checkInputValidity(adTitle, titleAlertMinLength, titleAlertMaxLength);
+  checkInputValidity(adPrice, priceAlertMinValue, priceAlertMaxValue);
+});
+
+var guestNumber = document.querySelector('#capacity');
+var roomNumber = document.querySelector('#room_number');
+
+var setCapacityOptionState = function (option) {
+  for (var i = 0; i < option.length; i++) {
+    option[i].disabled = true;
+  }
+};
+
+roomNumber.addEventListener('change', function () {
+  switch (roomNumber.value) {
+    case '1': setCapacityOptionState(guestNumber);
+      guestNumber[2].selected = true;
+      guestNumber[2].disabled = false;
+      break;
+    case '2': setCapacityOptionState(guestNumber);
+      guestNumber[1].selected = true;
+      guestNumber[1].disabled = false;
+      guestNumber[2].disabled = false;
+      break;
+    case '3': setCapacityOptionState(guestNumber);
+      guestNumber[0].selected = true;
+      guestNumber[0].disabled = false;
+      guestNumber[1].disabled = false;
+      guestNumber[2].disabled = false;
+      break;
+    case '100': setCapacityOptionState(guestNumber);
+      guestNumber[3].selected = true;
+      guestNumber[3].disabled = false;
+      break;
+  }
+});
+
+
