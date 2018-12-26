@@ -64,6 +64,9 @@ var ENABLED_MAP_STATE = false;
 var DISABLED_MAP_STATE = true;
 var ESC_BUTTON = 27;
 
+var TITLE_ALERT_MIN_LENGHT = 'Заголовок объявления должен состоять минимум из 30-х символов';
+var TITLE_ALERT_MAX_LENGHT = 'Заголовок объявления не должно превышать 100 символов';
+
 var generateRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 };
@@ -285,22 +288,45 @@ var mapPinMouseUpHandler = function () {
 setAvailabilityForm(DISABLED_MAP_STATE);
 mapPinMain.addEventListener('mouseup', mapPinMouseUpHandler);
 
-var form = document.querySelector('form');
 var adTitle = adForm.querySelector('[name=title]');
 var adPrice = adForm.querySelector('[name=price]');
 
-var titleAlertMinLength = 'Заголовок объявления должен состоять минимум из 20-х символов';
-var titleAlertMaxLength = 'Заголовок объявления не должно превышать 100 символов';
+var guestNumber = adForm.querySelector('#capacity');
+var roomNumber = adForm.querySelector('#room_number');
+var timeIn = adForm.querySelector('#timein');
+var timeOut = adForm.querySelector('#timeout');
+var typeOfHousing = adForm.querySelector('#type');
 
-var priceAlertMinValue = 'Минимальная цена за ночь должна быть минимум ' + MIN_PRICE + ' руб.';
+var priceAd = {
+  'bungalo': {
+    min: 0,
+    placeholder: 0
+  },
+  'flat': {
+    min: 1000,
+    placeholder: 1000
+  },
+  'house': {
+    min: 5000,
+    placeholder: 5000
+  },
+  'palace': {
+    min: 10000,
+    placeholder: 10000
+  }
+};
+
+/*
+var priceAlertMinValue = 'Минимальная цена за ночь должна быть минимум ' + adPrice.min + ' руб.';
 var priceAlertMaxValue = 'Максимальная цена за ночь должна быть максимум ' + MAX_PRICE + ' руб.';
+*/
 
-var checkInputValidity = function (checkValue, firstAlert, secondAlert) {
+var checkInputValidity = function (checkValue, tooShortAlert, tooLongAlert) {
   checkValue.addEventListener('invalid', function () {
     if (checkValue.validity.tooShort) {
-      checkValue.setCustomValidity(firstAlert);
+      checkValue.setCustomValidity(tooShortAlert);
     } else if (checkValue.validity.tooLong) {
-      checkValue.setCustomValidity(secondAlert);
+      checkValue.setCustomValidity(tooLongAlert);
     } else if (checkValue.validity.valueMissing) {
       checkValue.setCustomValidity('Обязательное поле');
     } else {
@@ -309,42 +335,80 @@ var checkInputValidity = function (checkValue, firstAlert, secondAlert) {
   });
 };
 
-form.addEventListener('submit', function () {
-  checkInputValidity(adTitle, titleAlertMinLength, titleAlertMaxLength);
-  checkInputValidity(adPrice, priceAlertMinValue, priceAlertMaxValue);
-});
-
-var guestNumber = document.querySelector('#capacity');
-var roomNumber = document.querySelector('#room_number');
-
-var setCapacityOptionState = function (option) {
+var setOptionState = function (option) {
   for (var i = 0; i < option.length; i++) {
     option[i].disabled = true;
   }
 };
 
-roomNumber.addEventListener('change', function () {
-  switch (roomNumber.value) {
-    case '1': setCapacityOptionState(guestNumber);
-      guestNumber[2].selected = true;
-      guestNumber[2].disabled = false;
-      break;
-    case '2': setCapacityOptionState(guestNumber);
-      guestNumber[1].selected = true;
-      guestNumber[1].disabled = false;
-      guestNumber[2].disabled = false;
-      break;
-    case '3': setCapacityOptionState(guestNumber);
-      guestNumber[0].selected = true;
-      guestNumber[0].disabled = false;
-      guestNumber[1].disabled = false;
-      guestNumber[2].disabled = false;
-      break;
-    case '100': setCapacityOptionState(guestNumber);
-      guestNumber[3].selected = true;
-      guestNumber[3].disabled = false;
-      break;
-  }
-});
+var changeState = function (firstInputValue, secondInputValue) {
+  firstInputValue.addEventListener('change', function () {
+    switch (firstInputValue.value) {
+      case '1': setOptionState(secondInputValue);
+        secondInputValue[2].selected = true;
+        secondInputValue[2].disabled = false;
+        return;
+      case '2': setOptionState(secondInputValue);
+        secondInputValue[1].selected = true;
+        secondInputValue[1].disabled = false;
+        secondInputValue[2].disabled = false;
+        break;
+      case '3': setOptionState(secondInputValue);
+        secondInputValue[0].selected = true;
+        secondInputValue[0].disabled = false;
+        secondInputValue[1].disabled = false;
+        secondInputValue[2].disabled = false;
+        break;
+      case '100': setOptionState(secondInputValue);
+        secondInputValue[3].selected = true;
+        secondInputValue[3].disabled = false;
+        break;
+      case '12:00': setOptionState(timeOut);
+        secondInputValue[0].selected = true;
+        secondInputValue[0].disabled = false;
+        break;
+      case '13:00': setOptionState(timeOut);
+        secondInputValue[1].selected = true;
+        secondInputValue[1].disabled = false;
+        break;
+      case '14:00': setOptionState(timeOut);
+        secondInputValue[2].selected = true;
+        secondInputValue[2].disabled = false;
+        break;
+      case 'bungalo': adPrice.placeholder = priceAd.bungalo.placeholder;
+        adPrice.min = priceAd.bungalo.min;
+        break;
+      case 'flat': adPrice.placeholder = priceAd.flat.placeholder;
+        adPrice.min = priceAd.flat.min;
+        break;
+      case 'house': adPrice.placeholder = priceAd.house.placeholder;
+        adPrice.min = priceAd.house.min;
+        break;
+      case 'palace': adPrice.placeholder = priceAd.palace.placeholder;
+        adPrice.min = priceAd.palace.min;
+        break;
+    }
+  });
+};
+/*
+var checkInputCostValidity = function (checkValue, tooShortAlert, tooLongAlert) {
+  checkValue.addEventListener('invalid', function () {
+    if (checkValue.validity.rangeUnderflow) {
+      checkValue.setCustomValidity(tooShortAlert);
+    } else if (checkValue.validity.rangeOverflow) {
+      checkValue.setCustomValidity(tooLongAlert);
+    } else if (checkValue.validity.valueMissing) {
+      checkValue.setCustomValidity('Обязательное поле');
+    } else {
+      checkValue.setCustomValidity('');
+    }
+  });
+};*/
 
+changeState(roomNumber, guestNumber);
+changeState(timeIn, timeOut);
+changeState(typeOfHousing, adPrice);
 
+checkInputValidity(adTitle, TITLE_ALERT_MIN_LENGHT, TITLE_ALERT_MAX_LENGHT);
+/*
+checkInputCostValidity(adPrice, priceAlertMinValue, priceAlertMaxValue);*/
