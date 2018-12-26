@@ -316,10 +316,7 @@ var priceAd = {
   }
 };
 
-/*
-var priceAlertMinValue = 'Минимальная цена за ночь должна быть минимум ' + adPrice.min + ' руб.';
 var priceAlertMaxValue = 'Максимальная цена за ночь должна быть максимум ' + MAX_PRICE + ' руб.';
-*/
 
 var checkInputValidity = function (checkValue, tooShortAlert, tooLongAlert) {
   checkValue.addEventListener('invalid', function () {
@@ -341,39 +338,36 @@ var setOptionState = function (option) {
   }
 };
 
+var selectedDisabledInput = function (inputValue, active, firstInput, secondInput) {
+  inputValue[active].selected = true;
+  inputValue[active].disabled = false;
+  inputValue[firstInput].disabled = false;
+  inputValue[secondInput].disabled = false;
+};
+
 var changeState = function (firstInputValue, secondInputValue) {
   firstInputValue.addEventListener('change', function () {
     switch (firstInputValue.value) {
       case '1': setOptionState(secondInputValue);
-        secondInputValue[2].selected = true;
-        secondInputValue[2].disabled = false;
+        selectedDisabledInput(guestNumber, 2, 2, 2);
         return;
       case '2': setOptionState(secondInputValue);
-        secondInputValue[1].selected = true;
-        secondInputValue[1].disabled = false;
-        secondInputValue[2].disabled = false;
+        selectedDisabledInput(guestNumber, 1, 2, 1);
         break;
       case '3': setOptionState(secondInputValue);
-        secondInputValue[0].selected = true;
-        secondInputValue[0].disabled = false;
-        secondInputValue[1].disabled = false;
-        secondInputValue[2].disabled = false;
+        selectedDisabledInput(guestNumber, 0, 1, 2);
         break;
       case '100': setOptionState(secondInputValue);
-        secondInputValue[3].selected = true;
-        secondInputValue[3].disabled = false;
+        selectedDisabledInput(guestNumber, 3, 3, 3);
         break;
       case '12:00': setOptionState(timeOut);
-        secondInputValue[0].selected = true;
-        secondInputValue[0].disabled = false;
+        selectedDisabledInput(guestNumber, 0);
         break;
       case '13:00': setOptionState(timeOut);
-        secondInputValue[1].selected = true;
-        secondInputValue[1].disabled = false;
+        selectedDisabledInput(guestNumber, 1);
         break;
       case '14:00': setOptionState(timeOut);
-        secondInputValue[2].selected = true;
-        secondInputValue[2].disabled = false;
+        selectedDisabledInput(guestNumber, 2);
         break;
       case 'bungalo': adPrice.placeholder = priceAd.bungalo.placeholder;
         adPrice.min = priceAd.bungalo.min;
@@ -388,8 +382,27 @@ var changeState = function (firstInputValue, secondInputValue) {
         adPrice.min = priceAd.palace.min;
         break;
     }
+    var priceAlertMinValue = 'Минимальная цена за ночь должна быть минимум ' + adPrice.min + ' руб.';
+
+    var checkInputCostValidity = function (checkValue, tooShortAlert, tooLongAlert) {
+      checkValue.addEventListener('invalid', function () {
+        if (checkValue.validity.rangeUnderflow) {
+          checkValue.setCustomValidity(tooShortAlert);
+        } else if (checkValue.validity.rangeOverflow) {
+          checkValue.setCustomValidity(tooLongAlert);
+        } else if (checkValue.validity.valueMissing) {
+          checkValue.setCustomValidity('Обязательное поле');
+        } else {
+          checkValue.setCustomValidity('');
+        }
+      });
+      return checkInputCostValidity;
+    };
+    checkInputCostValidity(adPrice, priceAlertMinValue, priceAlertMaxValue);
   });
 };
+
+
 /*
 var checkInputCostValidity = function (checkValue, tooShortAlert, tooLongAlert) {
   checkValue.addEventListener('invalid', function () {
@@ -407,7 +420,7 @@ var checkInputCostValidity = function (checkValue, tooShortAlert, tooLongAlert) 
 
 changeState(roomNumber, guestNumber);
 changeState(timeIn, timeOut);
-changeState(typeOfHousing, adPrice);
+changeState(typeOfHousing);
 
 checkInputValidity(adTitle, TITLE_ALERT_MIN_LENGHT, TITLE_ALERT_MAX_LENGHT);
 /*
