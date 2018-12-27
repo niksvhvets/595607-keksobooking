@@ -64,9 +64,6 @@ var ENABLED_MAP_STATE = false;
 var DISABLED_MAP_STATE = true;
 var ESC_BUTTON = 27;
 
-var TITLE_ALERT_MIN_LENGHT = 'Заголовок объявления должен состоять минимум из 30-х символов';
-var TITLE_ALERT_MAX_LENGHT = 'Заголовок объявления не должно превышать 100 символов';
-
 var generateRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
 };
@@ -265,9 +262,9 @@ var adForm = document.querySelector('.ad-form');
 var formFieldset = document.querySelectorAll('fieldset');
 var inputAddress = document.querySelector('#address');
 
-var setAvailabilityForm = function (state) {
-  for (var i = 0; i < formFieldset.length; i++) {
-    formFieldset[i].disabled = state;
+var setAvailabilityForm = function (thatChange, state) {
+  for (var i = 0; i < thatChange.length; i++) {
+    thatChange[i].disabled = state;
   }
 };
 
@@ -278,7 +275,7 @@ var getCoordinatesAddress = function () {
 var mapPinMouseUpHandler = function () {
   classRemove(map, 'map--faded');
   classRemove(adForm, 'ad-form--disabled');
-  setAvailabilityForm(ENABLED_MAP_STATE);
+  setAvailabilityForm(formFieldset, ENABLED_MAP_STATE);
   inputAddress.value = getCoordinatesAddress();
   if (map.querySelectorAll('.map__pin').length < 9) {
     mapPins.appendChild(renderPins());
@@ -288,140 +285,65 @@ var mapPinMouseUpHandler = function () {
 setAvailabilityForm(DISABLED_MAP_STATE);
 mapPinMain.addEventListener('mouseup', mapPinMouseUpHandler);
 
-var adTitle = adForm.querySelector('[name=title]');
 var adPrice = adForm.querySelector('[name=price]');
-
 var guestNumber = adForm.querySelector('#capacity');
 var roomNumber = adForm.querySelector('#room_number');
 var timeIn = adForm.querySelector('#timein');
 var timeOut = adForm.querySelector('#timeout');
 var typeOfHousing = adForm.querySelector('#type');
+var submitButton = adForm.querySelector('.ad-form__submit');
+
+var checkTimeSyncHandler = function (evt) {
+
+  var time = evt.target.value;
+
+  if (timeIn.value === time) {
+    timeOut.value = time;
+  } else if (timeOut.value === time) {
+    timeIn.value = time;
+  }
+};
+
+timeIn.addEventListener('change', checkTimeSyncHandler);
+timeOut.addEventListener('change', checkTimeSyncHandler);
 
 var priceAd = {
-  'bungalo': {
-    min: 0,
-    placeholder: 0
-  },
-  'flat': {
-    min: 1000,
-    placeholder: 1000
-  },
-  'house': {
-    min: 5000,
-    placeholder: 5000
-  },
-  'palace': {
-    min: 10000,
-    placeholder: 10000
+  'bungalo': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000
+};
+
+typeOfHousing.addEventListener('change', function () {
+  var type = typeOfHousing.value;
+
+  adPrice.placeholder = priceAd[type];
+  adPrice.min = priceAd[type];
+});
+
+roomNumber.addEventListener('change', function () {
+
+  var room = roomNumber.value;
+
+  setAvailabilityForm(guestNumber, true);
+
+  if (room !== '100') {
+    for (var i = 0; i < guestNumber.length; i++) {
+      if (guestNumber[i].value <= room) {
+        guestNumber[i].disabled = false;
+        guestNumber[guestNumber.length - 1].disabled = true;
+      }
+    }
+  } else {
+    guestNumber[guestNumber.length - 1].disabled = false;
+    guestNumber[guestNumber.length - 1].selected = true;
   }
-};
+});
 
-var priceAlertMaxValue = 'Максимальная цена за ночь должна быть максимум ' + MAX_PRICE + ' руб.';
-
-var checkInputValidity = function (checkValue, tooShortAlert, tooLongAlert) {
-  checkValue.addEventListener('invalid', function () {
-    if (checkValue.validity.tooShort) {
-      checkValue.setCustomValidity(tooShortAlert);
-    } else if (checkValue.validity.tooLong) {
-      checkValue.setCustomValidity(tooLongAlert);
-    } else if (checkValue.validity.valueMissing) {
-      checkValue.setCustomValidity('Обязательное поле');
-    } else {
-      checkValue.setCustomValidity('');
-    }
-  });
-};
-
-var setOptionState = function (option) {
-  for (var i = 0; i < option.length; i++) {
-    option[i].disabled = true;
+submitButton.addEventListener('click', function () {
+  if (guestNumber[guestNumber.selectedIndex].disabled) {
+    guestNumber.setCustomValidity('Кол-во мест выбрано не верно');
+  } else {
+    guestNumber.setCustomValidity('');
   }
-};
-
-var selectedDisabledInput = function (inputValue, active, firstInput, secondInput) {
-  inputValue[active].selected = true;
-  inputValue[active].disabled = false;
-  inputValue[firstInput].disabled = false;
-  inputValue[secondInput].disabled = false;
-};
-
-var changeState = function (firstInputValue, secondInputValue) {
-  firstInputValue.addEventListener('change', function () {
-    switch (firstInputValue.value) {
-      case '1': setOptionState(secondInputValue);
-        selectedDisabledInput(guestNumber, 2, 2, 2);
-        return;
-      case '2': setOptionState(secondInputValue);
-        selectedDisabledInput(guestNumber, 1, 2, 1);
-        break;
-      case '3': setOptionState(secondInputValue);
-        selectedDisabledInput(guestNumber, 0, 1, 2);
-        break;
-      case '100': setOptionState(secondInputValue);
-        selectedDisabledInput(guestNumber, 3, 3, 3);
-        break;
-      case '12:00': setOptionState(timeOut);
-        selectedDisabledInput(guestNumber, 0);
-        break;
-      case '13:00': setOptionState(timeOut);
-        selectedDisabledInput(guestNumber, 1);
-        break;
-      case '14:00': setOptionState(timeOut);
-        selectedDisabledInput(guestNumber, 2);
-        break;
-      case 'bungalo': adPrice.placeholder = priceAd.bungalo.placeholder;
-        adPrice.min = priceAd.bungalo.min;
-        break;
-      case 'flat': adPrice.placeholder = priceAd.flat.placeholder;
-        adPrice.min = priceAd.flat.min;
-        break;
-      case 'house': adPrice.placeholder = priceAd.house.placeholder;
-        adPrice.min = priceAd.house.min;
-        break;
-      case 'palace': adPrice.placeholder = priceAd.palace.placeholder;
-        adPrice.min = priceAd.palace.min;
-        break;
-    }
-    var priceAlertMinValue = 'Минимальная цена за ночь должна быть минимум ' + adPrice.min + ' руб.';
-
-    var checkInputCostValidity = function (checkValue, tooShortAlert, tooLongAlert) {
-      checkValue.addEventListener('invalid', function () {
-        if (checkValue.validity.rangeUnderflow) {
-          checkValue.setCustomValidity(tooShortAlert);
-        } else if (checkValue.validity.rangeOverflow) {
-          checkValue.setCustomValidity(tooLongAlert);
-        } else if (checkValue.validity.valueMissing) {
-          checkValue.setCustomValidity('Обязательное поле');
-        } else {
-          checkValue.setCustomValidity('');
-        }
-      });
-      return checkInputCostValidity;
-    };
-    checkInputCostValidity(adPrice, priceAlertMinValue, priceAlertMaxValue);
-  });
-};
-
-
-/*
-var checkInputCostValidity = function (checkValue, tooShortAlert, tooLongAlert) {
-  checkValue.addEventListener('invalid', function () {
-    if (checkValue.validity.rangeUnderflow) {
-      checkValue.setCustomValidity(tooShortAlert);
-    } else if (checkValue.validity.rangeOverflow) {
-      checkValue.setCustomValidity(tooLongAlert);
-    } else if (checkValue.validity.valueMissing) {
-      checkValue.setCustomValidity('Обязательное поле');
-    } else {
-      checkValue.setCustomValidity('');
-    }
-  });
-};*/
-
-changeState(roomNumber, guestNumber);
-changeState(timeIn, timeOut);
-changeState(typeOfHousing);
-
-checkInputValidity(adTitle, TITLE_ALERT_MIN_LENGHT, TITLE_ALERT_MAX_LENGHT);
-/*
-checkInputCostValidity(adPrice, priceAlertMinValue, priceAlertMaxValue);*/
+});
