@@ -55,7 +55,7 @@ var MAX_GUESTS = 10;
 var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
 var MIN_LOCATION_X = 10;
-var MAX_LOCATION_X = 1190;
+var MAX_LOCATION_X = 1120;
 var IMAGE_WIDTH = 40;
 var IMAGE_HEIGHT = 40;
 var ADS_COUNT = 8;
@@ -272,7 +272,7 @@ var getCoordinatesAddress = function () {
   return Math.floor(mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(mapPinMain.offsetTop + mapPinMain.offsetHeight / 2);
 };
 
-var mapPinMouseUpHandler = function () {
+var activateKeksobookingInterface = function () {
   classRemove(map, 'map--faded');
   classRemove(adForm, 'ad-form--disabled');
   setAvailabilityForm(formFieldset, ENABLED_MAP_STATE);
@@ -282,8 +282,7 @@ var mapPinMouseUpHandler = function () {
   }
 };
 
-setAvailabilityForm(DISABLED_MAP_STATE);
-mapPinMain.addEventListener('mouseup', mapPinMouseUpHandler);
+setAvailabilityForm(formFieldset, DISABLED_MAP_STATE);
 
 var adPrice = adForm.querySelector('[name=price]');
 var guestNumber = adForm.querySelector('#capacity');
@@ -346,4 +345,48 @@ submitButton.addEventListener('click', function () {
   } else {
     guestNumber.setCustomValidity('');
   }
+});
+
+mapPinMain.addEventListener('mousedown', function (evt) {
+
+  activateKeksobookingInterface();
+  evt.preventDefault();
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var mainPinMouseMoveHandler = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    var mapPinMainY = mapPinMain.offsetTop - shift.y;
+    var mapPinMainX = mapPinMain.offsetLeft - shift.x;
+
+    if (mapPinMainY >= MIN_LOCATION_Y && mapPinMainY <= MAX_LOCATION_Y) {
+      mapPinMain.style.top = mapPinMainY + 'px';
+    }
+    if (mapPinMainX >= MIN_LOCATION_X && mapPinMainX <= MAX_LOCATION_X) {
+      mapPinMain.style.left = mapPinMainX + 'px';
+    }
+  };
+
+  var mainPinMouseUpHandler = function (upEvt) {
+    upEvt.preventDefault();
+    inputAddress.value = getCoordinatesAddress();
+    document.removeEventListener('mousemove', mainPinMouseMoveHandler);
+    document.removeEventListener('mouseup', mainPinMouseUpHandler);
+  };
+  inputAddress.value = getCoordinatesAddress();
+  document.addEventListener('mousemove', mainPinMouseMoveHandler);
+  document.addEventListener('mouseup', mainPinMouseUpHandler);
 });
