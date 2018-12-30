@@ -54,8 +54,8 @@ var MIN_GUESTS = 1;
 var MAX_GUESTS = 10;
 var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
-var MIN_LOCATION_X = 10;
-var MAX_LOCATION_X = 1120;
+var MIN_LOCATION_X = 0;
+var MAX_LOCATION_X = 1135;
 var IMAGE_WIDTH = 40;
 var IMAGE_HEIGHT = 40;
 var ADS_COUNT = 8;
@@ -63,6 +63,7 @@ var generatedArrayAds = [];
 var ENABLED_MAP_STATE = false;
 var DISABLED_MAP_STATE = true;
 var ESC_BUTTON = 27;
+var pinEndPoint = 19;
 
 var generateRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -268,15 +269,19 @@ var setAvailabilityForm = function (thatChange, state) {
   }
 };
 
-var getCoordinatesAddress = function () {
-  return Math.floor(mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(mapPinMain.offsetTop + mapPinMain.offsetHeight / 2);
+var getCoordinatesAddress = function (centerOfPin) {
+  if (centerOfPin) {
+    return Math.floor(mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(mapPinMain.offsetTop + mapPinMain.offsetHeight / 2);
+  } else {
+    return Math.floor(mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(mapPinMain.offsetTop + mapPinMain.offsetHeight + pinEndPoint);
+  }
 };
 
 var activateKeksobookingInterface = function () {
   classRemove(map, 'map--faded');
   classRemove(adForm, 'ad-form--disabled');
   setAvailabilityForm(formFieldset, ENABLED_MAP_STATE);
-  inputAddress.value = getCoordinatesAddress();
+  inputAddress.value = getCoordinatesAddress(true);
   if (map.querySelectorAll('.map__pin').length < 9) {
     mapPins.appendChild(renderPins());
   }
@@ -349,14 +354,20 @@ submitButton.addEventListener('click', function () {
 
 mapPinMain.addEventListener('mousedown', function (evt) {
 
-  activateKeksobookingInterface();
   evt.preventDefault();
+
   var startCoords = {
     x: evt.clientX,
     y: evt.clientY
   };
 
+  //console.log(startCoords.x);
+  //console.log(startCoords.y);
+  //console.log(mapPinMain.offsetTop);
+ // console.log(mapPinMain.offsetLeft);
+
   var mainPinMouseMoveHandler = function (moveEvt) {
+    activateKeksobookingInterface();
     moveEvt.preventDefault();
 
     var shift = {
@@ -372,21 +383,26 @@ mapPinMain.addEventListener('mousedown', function (evt) {
     var mapPinMainY = mapPinMain.offsetTop - shift.y;
     var mapPinMainX = mapPinMain.offsetLeft - shift.x;
 
-    if (mapPinMainY >= MIN_LOCATION_Y && mapPinMainY <= MAX_LOCATION_Y) {
+    var mapPinXmin = 0;
+    var mapPinXmax = 1135;
+    var mapPinYmin = 46;    // метка высота 44 padding 8 border 10 + псевдоэлемент 22 = 84 => 130 - 84 = 46
+    var mapPinYmax = 546;   // 630 - 84 = 546;
+
+    if (mapPinMainY >= mapPinYmin && mapPinMainY <= mapPinYmax) {
       mapPinMain.style.top = mapPinMainY + 'px';
     }
-    if (mapPinMainX >= MIN_LOCATION_X && mapPinMainX <= MAX_LOCATION_X) {
+    if (mapPinMainX >= mapPinXmin && mapPinMainX <= mapPinXmax) {
       mapPinMain.style.left = mapPinMainX + 'px';
     }
   };
 
   var mainPinMouseUpHandler = function (upEvt) {
     upEvt.preventDefault();
-    inputAddress.value = getCoordinatesAddress();
+    inputAddress.value = getCoordinatesAddress(false);
     document.removeEventListener('mousemove', mainPinMouseMoveHandler);
     document.removeEventListener('mouseup', mainPinMouseUpHandler);
   };
-  inputAddress.value = getCoordinatesAddress();
+  inputAddress.value = getCoordinatesAddress(false);
   document.addEventListener('mousemove', mainPinMouseMoveHandler);
   document.addEventListener('mouseup', mainPinMouseUpHandler);
 });
