@@ -361,11 +361,6 @@ mapPinMain.addEventListener('mousedown', function (evt) {
     y: evt.clientY
   };
 
-  //console.log(startCoords.x);
-  //console.log(startCoords.y);
-  //console.log(mapPinMain.offsetTop);
- // console.log(mapPinMain.offsetLeft);
-
   var mainPinMouseMoveHandler = function (moveEvt) {
     activateKeksobookingInterface();
     moveEvt.preventDefault();
@@ -385,8 +380,8 @@ mapPinMain.addEventListener('mousedown', function (evt) {
 
     var mapPinXmin = 0;
     var mapPinXmax = 1135;
-    var mapPinYmin = 46;    // метка высота 44 padding 8 border 10 + псевдоэлемент 22 = 84 => 130 - 84 = 46
-    var mapPinYmax = 546;   // 630 - 84 = 546;
+    var mapPinYmin = 46; // метка высота 44 padding 8 border 10 + псевдоэлемент 22 = 84 => 130 - 84 = 46
+    var mapPinYmax = 546; // 630 - 84 = 546;
 
     if (mapPinMainY >= mapPinYmin && mapPinMainY <= mapPinYmax) {
       mapPinMain.style.top = mapPinMainY + 'px';
