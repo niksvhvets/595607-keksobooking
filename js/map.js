@@ -54,8 +54,8 @@ var MIN_GUESTS = 1;
 var MAX_GUESTS = 10;
 var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
-var MIN_LOCATION_X = 10;
-var MAX_LOCATION_X = 1190;
+var MIN_LOCATION_X = 0;
+var MAX_LOCATION_X = 1135;
 var IMAGE_WIDTH = 40;
 var IMAGE_HEIGHT = 40;
 var ADS_COUNT = 8;
@@ -63,6 +63,11 @@ var generatedArrayAds = [];
 var ENABLED_MAP_STATE = false;
 var DISABLED_MAP_STATE = true;
 var ESC_BUTTON = 27;
+var pinEndPoint = 19;
+var MAP_PIN_X_MIN = 0;
+var MAP_PIN_X_MAX = 1135;
+var MAP_PIN_Y_MIN = 46; // метка высота 44 padding 8 border 10 + псевдоэлемент 22 = 84 => 130 - 84 = 46
+var MAP_PIN_Y_MAX = 546; // 630 - 84 = 546;
 
 var generateRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -268,22 +273,25 @@ var setAvailabilityForm = function (thatChange, state) {
   }
 };
 
-var getCoordinatesAddress = function () {
-  return Math.floor(mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(mapPinMain.offsetTop + mapPinMain.offsetHeight / 2);
+var getCoordinatesAddress = function (centerOfPin) {
+  if (centerOfPin) {
+    return Math.floor(mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(mapPinMain.offsetTop + mapPinMain.offsetHeight / 2);
+  } else {
+    return Math.floor(mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + Math.floor(mapPinMain.offsetTop + mapPinMain.offsetHeight + pinEndPoint);
+  }
 };
 
-var mapPinMouseUpHandler = function () {
+var activateKeksobookingInterface = function () {
   classRemove(map, 'map--faded');
   classRemove(adForm, 'ad-form--disabled');
   setAvailabilityForm(formFieldset, ENABLED_MAP_STATE);
-  inputAddress.value = getCoordinatesAddress();
+  inputAddress.value = getCoordinatesAddress(true);
   if (map.querySelectorAll('.map__pin').length < 9) {
     mapPins.appendChild(renderPins());
   }
 };
 
-setAvailabilityForm(DISABLED_MAP_STATE);
-mapPinMain.addEventListener('mouseup', mapPinMouseUpHandler);
+setAvailabilityForm(formFieldset, DISABLED_MAP_STATE);
 
 var adPrice = adForm.querySelector('[name=price]');
 var guestNumber = adForm.querySelector('#capacity');
@@ -346,4 +354,49 @@ submitButton.addEventListener('click', function () {
   } else {
     guestNumber.setCustomValidity('');
   }
+});
+
+mapPinMain.addEventListener('mousedown', function (evt) {
+
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var mainPinMouseMoveHandler = function (moveEvt) {
+    activateKeksobookingInterface();
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    var mapPinMainY = mapPinMain.offsetTop - shift.y;
+    var mapPinMainX = mapPinMain.offsetLeft - shift.x;
+
+    if (mapPinMainY >= MAP_PIN_Y_MIN && mapPinMainY <= MAP_PIN_Y_MAX) {
+      mapPinMain.style.top = mapPinMainY + 'px';
+    }
+    if (mapPinMainX >= MAP_PIN_X_MIN && mapPinMainX <= MAP_PIN_X_MAX) {
+      mapPinMain.style.left = mapPinMainX + 'px';
+    }
+  };
+
+  var mainPinMouseUpHandler = function (upEvt) {
+    upEvt.preventDefault();
+    inputAddress.value = getCoordinatesAddress(false);
+    document.removeEventListener('mousemove', mainPinMouseMoveHandler);
+    document.removeEventListener('mouseup', mainPinMouseUpHandler);
+  };
+  inputAddress.value = getCoordinatesAddress(false);
+  document.addEventListener('mousemove', mainPinMouseMoveHandler);
+  document.addEventListener('mouseup', mainPinMouseUpHandler);
 });
