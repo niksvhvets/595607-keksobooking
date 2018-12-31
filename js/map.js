@@ -64,6 +64,10 @@ var ENABLED_MAP_STATE = false;
 var DISABLED_MAP_STATE = true;
 var ESC_BUTTON = 27;
 var pinEndPoint = 19;
+var MAP_PIN_X_MIN = 0;
+var MAP_PIN_X_MAX = 1135;
+var MAP_PIN_Y_MIN = 46; // метка высота 44 padding 8 border 10 + псевдоэлемент 22 = 84 => 130 - 84 = 46
+var MAP_PIN_Y_MAX = 546; // 630 - 84 = 546;
 
 var generateRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -378,15 +382,10 @@ mapPinMain.addEventListener('mousedown', function (evt) {
     var mapPinMainY = mapPinMain.offsetTop - shift.y;
     var mapPinMainX = mapPinMain.offsetLeft - shift.x;
 
-    var mapPinXmin = 0;
-    var mapPinXmax = 1135;
-    var mapPinYmin = 46; // метка высота 44 padding 8 border 10 + псевдоэлемент 22 = 84 => 130 - 84 = 46
-    var mapPinYmax = 546; // 630 - 84 = 546;
-
-    if (mapPinMainY >= mapPinYmin && mapPinMainY <= mapPinYmax) {
+    if (mapPinMainY >= MAP_PIN_Y_MIN && mapPinMainY <= MAP_PIN_Y_MAX) {
       mapPinMain.style.top = mapPinMainY + 'px';
     }
-    if (mapPinMainX >= mapPinXmin && mapPinMainX <= mapPinXmax) {
+    if (mapPinMainX >= MAP_PIN_X_MIN && mapPinMainX <= MAP_PIN_X_MAX) {
       mapPinMain.style.left = mapPinMainX + 'px';
     }
   };
