@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var makeElement = function (tagName, className, text) {
     var element = document.createElement(tagName);
     element.classList.add(className);
@@ -24,7 +25,7 @@
     item.appendChild(image);
 
     var pinElementClickHandler = function () {
-      if (window.domElement.map.querySelector('.map__card') !== null) {
+      if (window.itemSearch.map.querySelector('.map__card') !== null) {
         window.utils.removeDomElement('.map__card');
       }
       window.card.showAd(element);
@@ -45,9 +46,9 @@
 
   var getCoordinatesAddress = function (centerOfPin) {
     if (centerOfPin) {
-      return Math.floor(window.domElement.mapPinMain.offsetLeft + window.domElement.mapPinMain.offsetWidth / 2) + ', ' + Math.floor(window.domElement.mapPinMain.offsetTop + window.domElement.mapPinMain.offsetHeight / 2);
+      return Math.floor(window.itemSearch.mapPinMain.offsetLeft + window.itemSearch.mapPinMain.offsetWidth / 2) + ', ' + Math.floor(window.itemSearch.mapPinMain.offsetTop + window.itemSearch.mapPinMain.offsetHeight / 2);
     } else {
-      return Math.floor(window.domElement.mapPinMain.offsetLeft + window.domElement.mapPinMain.offsetWidth / 2) + ', ' + Math.floor(window.domElement.mapPinMain.offsetTop + window.domElement.mapPinMain.offsetHeight + window.constants.pinEndPoint);
+      return Math.floor(window.itemSearch.mapPinMain.offsetLeft + window.itemSearch.mapPinMain.offsetWidth / 2) + ', ' + Math.floor(window.itemSearch.mapPinMain.offsetTop + window.itemSearch.mapPinMain.offsetHeight + window.constants.pinEndPoint);
     }
   };
 

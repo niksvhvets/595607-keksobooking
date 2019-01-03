@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var map = document.querySelector('.map');
   var mapPins = document.querySelector('.map__pins');
   var mapFilters = document.querySelector('.map__filters-container');
@@ -8,7 +9,7 @@
   var formFieldset = document.querySelectorAll('fieldset');
   var inputAddress = document.querySelector('#address');
 
-  window.domElement = {
+  window.itemSearch = {
     map: map,
     mapPins: mapPins,
     mapFilters: mapFilters,
