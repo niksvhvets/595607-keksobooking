@@ -72,7 +72,7 @@
   };
 
   var showAd = function (ad) {
-    window.domElement.map.insertBefore(createAds(ad), window.domElement.mapFilters);
+    window.itemSearch.map.insertBefore(createAds(ad), window.itemSearch.mapFilters);
   };
 
   window.card = {

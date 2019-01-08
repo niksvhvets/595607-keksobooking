@@ -33,7 +33,7 @@
   };
 
   typeOfHousing.addEventListener('change', function () {
-    var type = window.domElement.typeOfHousing.value;
+    var type = typeOfHousing.value;
 
     adPrice.placeholder = priceAd[type];
     adPrice.min = priceAd[type];
@@ -65,6 +65,12 @@
       guestNumber.setCustomValidity('');
     }
   });
+  /*
+  adForm.addEventListener('submit', function (evt) {
+    window.backend(new FormData(form), function (response) {
+
+    });
+  });*/
 
   window.validation = {
     adForm: adForm
