@@ -65,14 +65,71 @@
       guestNumber.setCustomValidity('');
     }
   });
-  /*
-  adForm.addEventListener('submit', function (evt) {
-    window.backend(new FormData(form), function (response) {
 
+  var uploadSuccess = function () {
+    var successTemplate = document.querySelector('#success').content.querySelector('.success');
+    var successMessage = successTemplate.cloneNode(true);
+
+    window.itemSearch.main.appendChild(successMessage);
+
+    document.addEventListener('click', closeSuccessMessage);
+    document.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === window.constants.ESC_BUTTON) {
+        closeSuccessMessage();
+      }
     });
-  });*/
+  };
+
+  var closeSuccessMessage = function () {
+    var successMessage = document.querySelector('.success');
+
+    if (successMessage) {
+      window.itemSearch.main.removeChild(successMessage);
+
+      document.removeEventListener('click', closeSuccessMessage);
+      document.removeEventListener('keydown', closeSuccessMessage);
+
+      adForm.reset();
+    }
+  };
+
+  var uploadError = function () {
+    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+    var errorMessage = errorTemplate.cloneNode(true);
+    var errorButton = errorMessage.querySelector('.error__button');
+
+    window.itemSearch.main.appendChild(errorMessage);
+
+    errorButton.addEventListener('click', closeErrorMessage);
+    document.addEventListener('keydown', function (evt) {
+      if (evt.keyCode === window.constants.ESC_BUTTON) {
+        closeErrorMessage();
+      }
+    });
+  };
+
+  var closeErrorMessage = function () {
+    var ErrorMessage = document.querySelector('.error');
+    var errorButton = document.querySelector('.error__button');
+
+    if (ErrorMessage) {
+      window.itemSearch.main.removeChild(ErrorMessage);
+
+      errorButton.removeEventListener('click', closeErrorMessage);
+      document.removeEventListener('keydown', closeErrorMessage);
+
+      adForm.reset();
+    }
+  };
+
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+
+    window.backend.upload(new FormData(adForm), uploadSuccess, uploadError);
+  });
 
   window.validation = {
-    adForm: adForm
+    adForm: adForm,
+    uploadSuccess: uploadSuccess
   };
 })();

@@ -36,12 +36,14 @@
   };
 
   var renderPins = function () {
-    var pins = document.createDocumentFragment();
+    window.backend.load(function (response) {
+      var pins = document.createDocumentFragment();
 
-    for (var i = 0; i < window.constants.ADS_COUNT; i++) {
-      pins.appendChild(createPins(window.constants.generatedArrayAds[i]));
-    }
-    return pins;
+      for (var i = 0; i < window.constants.ADS_COUNT; i++) {
+        pins.appendChild(window.pin.createPins(response[i]));
+      }
+      window.itemSearch.mapPins.appendChild(pins);
+    });
   };
 
   var getCoordinatesAddress = function (centerOfPin) {
@@ -53,6 +55,7 @@
   };
 
   window.pin = {
+    createPins: createPins,
     renderPins: renderPins,
     getCoordinatesAddress: getCoordinatesAddress
   };
