@@ -7,12 +7,9 @@
     window.utils.classRemove(window.validation.adForm, 'ad-form--disabled');
     window.utils.setAvailabilityForm(window.itemSearch.formFieldset, window.constants.ENABLED_MAP_STATE);
     window.itemSearch.inputAddress.value = window.pin.getCoordinatesAddress(true);
-    if (window.itemSearch.map.querySelectorAll('.map__pin').length < 9) {
-      window.itemSearch.mapPins.appendChild(window.pin.renderPins());
-    }
+    window.pin.renderPins();
   };
 
-  window.utils.setAvailabilityForm(window.itemSearch.formFieldset, window.constants.DISABLED_MAP_STATE);
   window.itemSearch.mapPinMain.addEventListener('mousedown', function (evt) {
 
     evt.preventDefault();
@@ -49,6 +46,7 @@
 
     var mainPinMouseUpHandler = function (upEvt) {
       upEvt.preventDefault();
+
       window.itemSearch.inputAddress.value = window.pin.getCoordinatesAddress(false);
       document.removeEventListener('mousemove', mainPinMouseMoveHandler);
       document.removeEventListener('mouseup', mainPinMouseUpHandler);
@@ -57,4 +55,9 @@
     document.addEventListener('mousemove', mainPinMouseMoveHandler);
     document.addEventListener('mouseup', mainPinMouseUpHandler);
   });
+
+  window.activateInterface = {
+    activateInterface: activateInterface
+  };
+
 })();

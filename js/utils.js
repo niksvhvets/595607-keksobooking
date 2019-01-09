@@ -36,7 +36,7 @@
   };
 
   var removeDomElement = function (element) {
-    window.domElement.map.querySelector(element).remove();
+    window.itemSearch.map.querySelector(element).remove();
   };
 
   window.utils = {
