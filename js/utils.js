@@ -39,6 +39,13 @@
     window.itemSearch.map.querySelector(element).remove();
   };
 
+  var removePins = function () {
+    var mapPins = document.querySelectorAll('.map__pins .map__pin');
+    mapPins.forEach(function (el) {
+      document.querySelector('.map__pins').removeChild(el);
+    });
+  };
+
   window.utils = {
     generateRandomNumber: generateRandomNumber,
     getRandomElement: getRandomElement,
@@ -46,7 +53,8 @@
     getRandomLengthArray: getRandomLengthArray,
     classRemove: classRemove,
     setAvailabilityForm: setAvailabilityForm,
-    removeDomElement: removeDomElement
+    removeDomElement: removeDomElement,
+    removePins: removePins
   };
 
 })();

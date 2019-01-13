@@ -7,11 +7,13 @@
     window.utils.classRemove(window.validation.adForm, 'ad-form--disabled');
     window.utils.setAvailabilityForm(window.itemSearch.formFieldset, window.constants.ENABLED_MAP_STATE);
     window.itemSearch.inputAddress.value = window.pin.getCoordinatesAddress(true);
-    window.pin.renderPins();
+    // if (window.pin.arrayAds.length > 0) {
+    //   window.utils.setAvailabilityForm(window.filter.mapFilters, window.constants.ENABLED_MAP_STATE);
+    // }
   };
 
   window.itemSearch.mapPinMain.addEventListener('mousedown', function (evt) {
-
+    window.pin.renderPins();
     evt.preventDefault();
 
     var startCoords = {

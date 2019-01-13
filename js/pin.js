@@ -35,15 +35,19 @@
     return item;
   };
 
+  var arrayAds = [];
+
   var renderPins = function () {
     window.backend.load(function (response) {
       var pins = document.createDocumentFragment();
 
       for (var i = 0; i < window.constants.ADS_COUNT; i++) {
         pins.appendChild(window.pin.createPins(response[i]));
+        arrayAds.push(response[i]);
       }
       window.itemSearch.mapPins.appendChild(pins);
     });
+    return arrayAds;
   };
 
   var getCoordinatesAddress = function (centerOfPin) {
@@ -57,7 +61,8 @@
   window.pin = {
     createPins: createPins,
     renderPins: renderPins,
-    getCoordinatesAddress: getCoordinatesAddress
+    getCoordinatesAddress: getCoordinatesAddress,
+    arrayAds: arrayAds
   };
 
 })();
