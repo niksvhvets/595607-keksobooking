@@ -1,6 +1,9 @@
 'use strict';
 
 (function () {
+
+  var DEBOUNCE = 500;
+
   var generateRandomNumber = function (min, max) {
     return Math.floor(Math.random() * (max - min) + min);
   };
@@ -40,10 +43,28 @@
   };
 
   var removePins = function () {
-    var mapPins = document.querySelectorAll('.map__pins .map__pin');
+    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
     mapPins.forEach(function (el) {
-      document.querySelector('.map__pins').removeChild(el);
+      window.itemSearch.mapPins.removeChild(el);
     });
+  };
+
+  var debounce = function (cb) {
+    var lastTimeout;
+
+    return function () {
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(cb, DEBOUNCE);
+    };
+  };
+
+  var closeOpenedPopup = function () {
+    var oldCard = window.itemSearch.map.querySelector('.map__card');
+    if (oldCard) {
+      oldCard.remove();
+    }
   };
 
   window.utils = {
@@ -54,7 +75,9 @@
     classRemove: classRemove,
     setAvailabilityForm: setAvailabilityForm,
     removeDomElement: removeDomElement,
-    removePins: removePins
+    removePins: removePins,
+    debounce: debounce,
+    closeOpenedPopup: closeOpenedPopup
   };
 
 })();
