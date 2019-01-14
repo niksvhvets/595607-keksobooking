@@ -64,25 +64,23 @@
       }
     };
 
+    var hideEmtyblock = function (block, popupInfo) {
+      if (!block || block.length === 0) {
+        popupInfo.style.display = 'none';
+      }
+    };
+
     img.src = element.author.avatar;
-    if (!element.author.avatar) {
-      img.style.display = 'none';
-    }
+    hideEmtyblock(element.author.avatar, img);
 
     popupTitle.textContent = element.offer.title;
-    if (!element.offer.title) {
-      popupTitle.style.display = 'none';
-    }
+    hideEmtyblock(element.offer.title, popupTitle);
 
     popupTextAddress.textContent = element.offer.address;
-    if (!element.offer.address) {
-      popupTextAddress.style.display = 'none';
-    }
+    hideEmtyblock(element.offer.address, popupTextAddress);
 
     popupTextPrice.textContent = element.offer.price + '₽/нoчь';
-    if (!element.offer.price) {
-      popupTextPrice.style.display = 'none';
-    }
+    hideEmtyblock(element.offer.price, popupTextPrice);
 
     popupType.textContent = element.offer.type;
     switch (element.offer.type) {
@@ -114,20 +112,14 @@
 
     popupFeatures.innerHTML = '';
     popupFeatures.appendChild(createFeatures(element.offer.features));
-    if (element.offer.features.length === 0) {
-      popupFeatures.style.display = 'none';
-    }
+    hideEmtyblock(element.offer.features, popupFeatures);
 
     popupDescription.textContent = element.offer.description;
-    if (!element.offer.description) {
-      popupDescription.style.display = 'none';
-    }
+    hideEmtyblock(element.offer.description, popupDescription);
 
     popupPhotos.innerHTML = '';
     popupPhotos.appendChild(createPhotos(element.offer.photos));
-    if (element.offer.photos.length === 0) {
-      popupPhotos.style.display = 'none';
-    }
+    hideEmtyblock(element.offer.photos, popupPhotos);
 
     popupClose.addEventListener('click', popupCloseClickHandler);
     document.addEventListener('keydown', popupCloseEscButton);
