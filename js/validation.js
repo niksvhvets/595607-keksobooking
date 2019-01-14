@@ -69,6 +69,8 @@
   });
 
   var uploadSuccessMessage = function () {
+    window.utils.resetPage();
+
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
     var successMessage = successTemplate.cloneNode(true);
 
@@ -91,7 +93,6 @@
       document.removeEventListener('click', closeSuccessMessage);
       document.removeEventListener('keydown', closeSuccessMessage);
 
-      adForm.reset();
     }
   };
 
