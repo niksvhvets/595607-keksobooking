@@ -32,6 +32,7 @@
     };
 
     item.addEventListener('click', pinElementClickHandler);
+
     return item;
   };
 

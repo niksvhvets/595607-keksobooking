@@ -16,6 +16,12 @@
   var MAP_PIN_X_MAX = 1135;
   var MAP_PIN_Y_MIN = 46; // метка высота 44 padding 8 border 10 + псевдоэлемент 22 = 84 => 130 - 84 = 46
   var MAP_PIN_Y_MAX = 546; // 630 - 84 = 546;
+  var BACKEND = {
+    STATUS_200: 200,
+    TIMEOUT: 10000
+  };
+  var UPLOAD_URL = 'https://js.dump.academy/keksobooking/';
+  var LOAD_URL = 'https://js.dump.academy/keksobooking/data';
 
   window.constants = {
     MIN_LOCATION_Y: MIN_LOCATION_Y,
@@ -32,6 +38,9 @@
     MAP_PIN_X_MIN: MAP_PIN_X_MIN,
     MAP_PIN_X_MAX: MAP_PIN_X_MAX,
     MAP_PIN_Y_MIN: MAP_PIN_Y_MIN,
-    MAP_PIN_Y_MAX: MAP_PIN_Y_MAX
+    MAP_PIN_Y_MAX: MAP_PIN_Y_MAX,
+    BACKEND: BACKEND,
+    UPLOAD_URL: UPLOAD_URL,
+    LOAD_URL: LOAD_URL
   };
 })();

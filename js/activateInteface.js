@@ -57,8 +57,4 @@
     document.addEventListener('mouseup', mainPinMouseUpHandler);
   });
 
-  window.activateInterface = {
-    activateInterface: activateInterface
-  };
-
 })();

@@ -27,18 +27,18 @@
   timeIn.addEventListener('change', checkTimeSyncHandler);
   timeOut.addEventListener('change', checkTimeSyncHandler);
 
-  var priceAd = {
-    'bungalo': 0,
-    'flat': 1000,
-    'house': 5000,
-    'palace': 10000
+  var PriceAd = {
+    BUNGALO: 0,
+    FLAT: 1000,
+    HOUSE: 5000,
+    PALACE: 10000
   };
 
   typeOfHousing.addEventListener('change', function () {
     var type = typeOfHousing.value;
-
-    adPrice.placeholder = priceAd[type];
-    adPrice.min = priceAd[type];
+    type.toUpperCase();
+    adPrice.placeholder = PriceAd[type.toUpperCase()];
+    adPrice.min = PriceAd[type.toUpperCase()];
   });
 
   roomNumber.addEventListener('change', function () {
@@ -68,7 +68,7 @@
     }
   });
 
-  var uploadSuccess = function () {
+  var uploadSuccessMessage = function () {
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
     var successMessage = successTemplate.cloneNode(true);
 
@@ -95,7 +95,7 @@
     }
   };
 
-  var uploadError = function () {
+  var uploadErrorMessage = function () {
     var errorTemplate = document.querySelector('#error').content.querySelector('.error');
     var errorMessage = errorTemplate.cloneNode(true);
     var errorButton = errorMessage.querySelector('.error__button');
@@ -127,11 +127,11 @@
   adForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
 
-    window.backend.upload(new FormData(adForm), uploadSuccess, uploadError);
+    window.backend.upload(new FormData(adForm), uploadSuccessMessage, uploadErrorMessage);
   });
 
   window.validation = {
     adForm: adForm,
-    uploadSuccess: uploadSuccess
+    uploadSuccessMessage: uploadSuccessMessage
   };
 })();
