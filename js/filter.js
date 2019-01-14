@@ -10,13 +10,12 @@
 
   window.utils.setAvailabilityForm(mapFilters, window.constants.DISABLED_MAP_STATE);
 
-  var housePrices = {
-    low: 10000,
-    middle: [10000, 50000],
-    high: 50000
+  var HousesPrices = {
+    MIN: 10000,
+    MAX: 50000
   };
 
-  var housingTypeFilter = function (ad) {
+  var getTypeFilter = function (ad) {
     var value = typeSelect.value;
     if (value === 'any' || value === ad.offer.type) {
       return true;
@@ -24,18 +23,18 @@
     return false;
   };
 
-  var housingPriceFilter = function (ad) {
+  var getPriceFilter = function (ad) {
 
     var value = priceSelect.value;
     switch (value) {
-      case 'low': return ad.offer.price < housePrices[value];
-      case 'middle': return ((ad.offer.price >= housePrices[value][0]) && (ad.offer.price <= housePrices[value][1]));
-      case 'high': return ad.offer.price > housePrices[value];
+      case 'low': return ad.offer.price < HousesPrices.MIN;
+      case 'middle': return ((ad.offer.price >= HousesPrices.MIN) && (ad.offer.price <= HousesPrices.MAX));
+      case 'high': return ad.offer.price > HousesPrices.MAX;
       default: return true;
     }
   };
 
-  var housingRoomsSelect = function (ad) {
+  var getRoomsSelect = function (ad) {
     var value = roomsSelect.value;
     if (value === 'any' || +value === ad.offer.rooms) {
       return true;
@@ -43,7 +42,7 @@
     return false;
   };
 
-  var housingGuestsSelect = function (ad) {
+  var getGuestsSelect = function (ad) {
     var value = guestsSelect.value;
     if (value === 'any' || +value === ad.offer.guests) {
       return true;
@@ -68,13 +67,13 @@
     return true;
   };
 
-  var filterPins = function () {
+  var getfilterPins = function () {
     var newData = window.pin.arrayAds;
     var filteredArray = newData.filter(function (data) {
-      return housingTypeFilter(data)
-          && housingPriceFilter(data)
-          && housingRoomsSelect(data)
-          && housingGuestsSelect(data)
+      return getTypeFilter(data)
+          && getPriceFilter(data)
+          && getRoomsSelect(data)
+          && getGuestsSelect(data)
           && getChangeFeature(data);
     });
 
@@ -83,7 +82,7 @@
   };
 
   mapFilters.addEventListener('change', window.utils.closeOpenedPopup);
-  mapFilters.addEventListener('change', window.utils.debounce(filterPins));
+  mapFilters.addEventListener('change', window.utils.debounce(getfilterPins));
 
   window.filter = {
     mapFilters: mapFilters

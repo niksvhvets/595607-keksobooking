@@ -6,6 +6,7 @@
     window.utils.classRemove(window.itemSearch.map, 'map--faded');
     window.utils.classRemove(window.validation.adForm, 'ad-form--disabled');
     window.utils.setAvailabilityForm(window.filter.mapFilters, window.constants.ENABLED_MAP_STATE);
+    window.utils.setAvailabilityForm(window.itemSearch.formFieldset, window.constants.ENABLED_MAP_STATE);
     window.itemSearch.inputAddress.value = window.pin.getCoordinatesAddress(true);
   };
 
@@ -55,9 +56,5 @@
     document.addEventListener('mousemove', mainPinMouseMoveHandler);
     document.addEventListener('mouseup', mainPinMouseUpHandler);
   });
-
-  window.activateInterface = {
-    activateInterface: activateInterface
-  };
 
 })();
