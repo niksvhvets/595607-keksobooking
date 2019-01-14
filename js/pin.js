@@ -41,9 +41,11 @@
     window.backend.load(function (response) {
       var pins = document.createDocumentFragment();
 
-      for (var i = 0; i < window.constants.ADS_COUNT; i++) {
-        pins.appendChild(window.pin.createPins(response[i]));
+      for (var i = 0; i < response.length; i++) {
         arrayAds.push(response[i]);
+      }
+      for (var j = 0; j < window.constants.ADS_COUNT; j++) {
+        pins.appendChild(window.pin.createPins(response[j]));
       }
       window.itemSearch.mapPins.appendChild(pins);
     });

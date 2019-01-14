@@ -52,7 +52,7 @@
   var MAX_LOCATION_X = 1135;
   var IMAGE_WIDTH = 40;
   var IMAGE_HEIGHT = 40;
-  var ADS_COUNT = 8;
+  var ADS_COUNT = 5;
   var FILTERED_ADS_COUNT = 5;
   var generatedArrayAds = [];
   var ENABLED_MAP_STATE = false;
