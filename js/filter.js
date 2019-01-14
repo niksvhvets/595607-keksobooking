@@ -75,7 +75,7 @@
           && getRoomsSelect(data)
           && getGuestsSelect(data)
           && getChangeFeature(data);
-    });
+    }).slice(0, window.constants.FILTERED_ADS_COUNT);
 
     window.utils.removePins();
     renderFilteredPins(filteredArray);

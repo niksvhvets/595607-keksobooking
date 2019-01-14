@@ -8,6 +8,7 @@
   var IMAGE_WIDTH = 40;
   var IMAGE_HEIGHT = 40;
   var ADS_COUNT = 5;
+  var FILTERED_ADS_COUNT = 4;
   var ENABLED_MAP_STATE = false;
   var DISABLED_MAP_STATE = true;
   var ESC_BUTTON = 27;
@@ -16,6 +17,8 @@
   var MAP_PIN_X_MAX = 1135;
   var MAP_PIN_Y_MIN = 46; // метка высота 44 padding 8 border 10 + псевдоэлемент 22 = 84 => 130 - 84 = 46
   var MAP_PIN_Y_MAX = 546; // 630 - 84 = 546;
+  var MAIN_PIN_COORDINATE_X = 570;
+  var MAIN_PIN_COORDINATE_Y = 375;
   var BACKEND = {
     STATUS_200: 200,
     TIMEOUT: 10000
@@ -41,6 +44,9 @@
     MAP_PIN_Y_MAX: MAP_PIN_Y_MAX,
     BACKEND: BACKEND,
     UPLOAD_URL: UPLOAD_URL,
-    LOAD_URL: LOAD_URL
+    LOAD_URL: LOAD_URL,
+    MAIN_PIN_COORDINATE_X: MAIN_PIN_COORDINATE_X,
+    MAIN_PIN_COORDINATE_Y: MAIN_PIN_COORDINATE_Y,
+    FILTERED_ADS_COUNT: FILTERED_ADS_COUNT
   };
 })();

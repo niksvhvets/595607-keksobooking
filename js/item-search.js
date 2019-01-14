@@ -10,6 +10,7 @@
   var formFieldset = document.querySelectorAll('fieldset');
   var inputAddress = document.querySelector('#address');
   var main = document.querySelector('main');
+  var resetButtom = document.querySelector('.ad-form__reset');
 
   window.itemSearch = {
     map: map,
@@ -19,7 +20,8 @@
     mapPinMain: mapPinMain,
     formFieldset: formFieldset,
     inputAddress: inputAddress,
-    main: main
+    main: main,
+    resetButtom: resetButtom
   };
 
 })();
