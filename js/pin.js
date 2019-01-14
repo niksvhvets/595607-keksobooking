@@ -56,7 +56,7 @@
     if (centerOfPin) {
       return Math.floor(window.itemSearch.mapPinMain.offsetLeft + window.itemSearch.mapPinMain.offsetWidth / 2) + ', ' + Math.floor(window.itemSearch.mapPinMain.offsetTop + window.itemSearch.mapPinMain.offsetHeight / 2);
     } else {
-      return Math.floor(window.itemSearch.mapPinMain.offsetLeft + window.itemSearch.mapPinMain.offsetWidth / 2) + ', ' + Math.floor(window.itemSearch.mapPinMain.offsetTop + window.itemSearch.mapPinMain.offsetHeight + window.constants.pinEndPoint);
+      return Math.floor(window.itemSearch.mapPinMain.offsetLeft + window.itemSearch.mapPinMain.offsetWidth / 2) + ', ' + Math.floor(window.itemSearch.mapPinMain.offsetTop + window.itemSearch.mapPinMain.offsetHeight + window.constants.PIN_END_POINT);
     }
   };
 
