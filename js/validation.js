@@ -11,6 +11,8 @@
   var typeOfHousing = adForm.querySelector('#type');
   var submitButton = adForm.querySelector('.ad-form__submit');
 
+  window.utils.setAvailabilityForm(window.itemSearch.formFieldset, window.constants.DISABLED_MAP_STATE);
+
   var checkTimeSyncHandler = function (evt) {
 
     var time = evt.target.value;

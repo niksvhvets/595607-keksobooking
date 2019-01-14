@@ -1,0 +1,92 @@
+'use strict';
+
+(function () {
+  var mapFilters = document.querySelector('.map__filters');
+  var typeSelect = mapFilters.querySelector('#housing-type');
+  var priceSelect = mapFilters.querySelector('#housing-price');
+  var roomsSelect = mapFilters.querySelector('#housing-rooms');
+  var guestsSelect = mapFilters.querySelector('#housing-guests');
+  var featuresChoose = mapFilters.querySelectorAll('.map__checkbox');
+
+  window.utils.setAvailabilityForm(mapFilters, window.constants.DISABLED_MAP_STATE);
+
+  var housePrices = {
+    low: 10000,
+    middle: [10000, 50000],
+    high: 50000
+  };
+
+  var housingTypeFilter = function (ad) {
+    var value = typeSelect.value;
+    if (value === 'any' || value === ad.offer.type) {
+      return true;
+    }
+    return false;
+  };
+
+  var housingPriceFilter = function (ad) {
+
+    var value = priceSelect.value;
+    switch (value) {
+      case 'low': return ad.offer.price < housePrices[value];
+      case 'middle': return ((ad.offer.price >= housePrices[value][0]) && (ad.offer.price <= housePrices[value][1]));
+      case 'high': return ad.offer.price > housePrices[value];
+      default: return true;
+    }
+  };
+
+  var housingRoomsSelect = function (ad) {
+    var value = roomsSelect.value;
+    if (value === 'any' || +value === ad.offer.rooms) {
+      return true;
+    }
+    return false;
+  };
+
+  var housingGuestsSelect = function (ad) {
+    var value = guestsSelect.value;
+    if (value === 'any' || +value === ad.offer.guests) {
+      return true;
+    }
+    return false;
+  };
+
+  var renderFilteredPins = function (newPins) {
+    var pins = document.createDocumentFragment();
+    for (var i = 0; i < newPins.length; i++) {
+      pins.appendChild(window.pin.createPins(newPins[i]));
+    }
+    window.itemSearch.mapPins.appendChild(pins);
+  };
+
+  var getChangeFeature = function (data) {
+    for (var i = 0; i < featuresChoose.length; i++) {
+      if (featuresChoose[i].checked && data.offer.features.indexOf(featuresChoose[i].value) < 0) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  var filterPins = function () {
+    var newData = window.pin.arrayAds;
+    var filteredArray = newData.filter(function (data) {
+      return housingTypeFilter(data)
+          && housingPriceFilter(data)
+          && housingRoomsSelect(data)
+          && housingGuestsSelect(data)
+          && getChangeFeature(data);
+    });
+
+    window.utils.removePins();
+    renderFilteredPins(filteredArray);
+  };
+
+  mapFilters.addEventListener('change', window.utils.closeOpenedPopup);
+  mapFilters.addEventListener('change', window.utils.debounce(filterPins));
+
+  window.filter = {
+    mapFilters: mapFilters
+  };
+
+})();

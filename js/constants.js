@@ -53,6 +53,7 @@
   var IMAGE_WIDTH = 40;
   var IMAGE_HEIGHT = 40;
   var ADS_COUNT = 8;
+  var FILTERED_ADS_COUNT = 5;
   var generatedArrayAds = [];
   var ENABLED_MAP_STATE = false;
   var DISABLED_MAP_STATE = true;
@@ -83,6 +84,7 @@
     IMAGE_WIDTH: IMAGE_WIDTH,
     IMAGE_HEIGHT: IMAGE_HEIGHT,
     ADS_COUNT: ADS_COUNT,
+    FILTERED_ADS_COUNT: FILTERED_ADS_COUNT,
     generatedArrayAds: generatedArrayAds,
     ENABLED_MAP_STATE: ENABLED_MAP_STATE,
     DISABLED_MAP_STATE: DISABLED_MAP_STATE,
