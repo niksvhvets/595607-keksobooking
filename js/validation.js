@@ -111,15 +111,15 @@
   };
 
   var closeErrorMessage = function () {
-    var ErrorMessage = document.querySelector('.error');
+    var errorMessage = document.querySelector('.error');
     var errorButton = document.querySelector('.error__button');
 
-    if (ErrorMessage) {
-      window.itemSearch.main.removeChild(ErrorMessage);
+    if (errorMessage) {
+      window.itemSearch.main.removeChild(errorMessage);
 
       errorButton.removeEventListener('click', closeErrorMessage);
       document.removeEventListener('keydown', closeErrorMessage);
-
+      // window.utils.resetPage();
       adForm.reset();
     }
   };
@@ -130,8 +130,11 @@
     window.backend.upload(new FormData(adForm), uploadSuccessMessage, uploadErrorMessage);
   });
 
+  window.itemSearch.resetButtom.addEventListener('click', function () {
+    window.utils.resetPage();
+  });
+
   window.validation = {
-    adForm: adForm,
-    uploadSuccessMessage: uploadSuccessMessage
+    adForm: adForm
   };
 })();

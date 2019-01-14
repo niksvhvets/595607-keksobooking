@@ -2,27 +2,17 @@
 
 (function () {
 
-  var makeElement = function (tagName, className, text) {
-    var element = document.createElement(tagName);
-    element.classList.add(className);
-    if (text) {
-      element.textContent = text;
-    }
-    return element;
-  };
+  var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
   var createPins = function (element) {
-    var item = makeElement('buttom', 'map__pin');
-    item.style.left = (element.location.x) + 'px';
-    item.style.top = (element.location.y) + 'px';
-
-    var image = makeElement('img');
-    image.src = element.author.avatar;
-    image.width = window.constants.IMAGE_WIDTH;
-    image.height = window.constants.IMAGE_HEIGHT;
-    image.draggable = false;
-    image.alt = element.offer.title;
-    item.appendChild(image);
+    var pinElement = pinTemplate.cloneNode(true);
+    pinElement.style.left = (element.location.x) + 'px';
+    pinElement.style.top = (element.location.y) + 'px';
+    pinElement.querySelector('img').src = element.author.avatar;
+    pinElement.querySelector('img').width = window.constants.IMAGE_WIDTH;
+    pinElement.querySelector('img').height = window.constants.IMAGE_HEIGHT;
+    pinElement.querySelector('img').draggable = false;
+    pinElement.querySelector('img').alt = element.offer.title;
 
     var pinElementClickHandler = function () {
       if (window.itemSearch.map.querySelector('.map__card') !== null) {
@@ -31,9 +21,9 @@
       window.card.showAd(element);
     };
 
-    item.addEventListener('click', pinElementClickHandler);
+    pinElement.addEventListener('click', pinElementClickHandler);
 
-    return item;
+    return pinElement;
   };
 
   var arrayAds = [];
@@ -44,6 +34,7 @@
 
       for (var i = 0; i < response.length; i++) {
         arrayAds.push(response[i]);
+        arrayAds.slice(0, 4);
       }
       for (var j = 0; j < window.constants.ADS_COUNT; j++) {
         pins.appendChild(window.pin.createPins(response[j]));
