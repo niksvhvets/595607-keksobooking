@@ -50,8 +50,7 @@
 
     var popupCloseClickHandler = function () {
 
-      var clickButtonClose = window.utils.removeDomElement('.map__card');
-      clickButtonClose();
+      window.utils.removeDomElement('.map__card');
       document.removeEventListener('click', popupCloseEscButton);
 
       ad.addEventListener('keydown', function () {
@@ -63,8 +62,8 @@
 
     var popupCloseEscButton = function (evt) {
       if (evt.keyCode === window.constants.ESC_BUTTON) {
-        var pressEscButton = window.utils.removeDomElement('.map__card');
-        pressEscButton();
+
+        window.utils.removeDomElement('.map__card');
         document.removeEventListener('keydown', popupCloseEscButton);
       }
     };

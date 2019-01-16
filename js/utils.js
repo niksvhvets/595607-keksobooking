@@ -9,9 +9,9 @@
     window.utils.addClass(window.validation.adForm, 'ad-form--disabled');
     window.utils.setAvailabilityForm(window.filter.mapFilters, window.constants.DISABLED_MAP_STATE);
     window.utils.setAvailabilityForm(window.itemSearch.formFieldset, window.constants.DISABLED_MAP_STATE);
+    window.utils.removeDomElement('.map__card');
     window.validation.adForm.reset();
     removePins();
-    removeAd();
     resetPinMainCoordinate();
   };
 
@@ -38,19 +38,11 @@
   };
 
   var removeDomElement = function (element) {
+    var foundElement = document.querySelector(element);
 
-    return function () {
-      var foundElement = document.querySelector(element);
-
-      if (foundElement) {
-        foundElement.remove();
-      }
-    };
-  };
-
-  var removeAd = function () {
-    var ad = window.utils.removeDomElement('.map__card');
-    ad();
+    if (foundElement) {
+      foundElement.remove();
+    }
   };
 
   var removePins = function () {

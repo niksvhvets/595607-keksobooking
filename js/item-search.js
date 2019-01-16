@@ -9,6 +9,7 @@
   var mapPinMain = document.querySelector('.map__pin--main');
   var formFieldset = document.querySelectorAll('fieldset');
   var inputAddress = document.querySelector('#address');
+  var titleAd = document.querySelector('#title');
   var main = document.querySelector('main');
   var resetButtom = document.querySelector('.ad-form__reset');
 
@@ -20,6 +21,7 @@
     mapPinMain: mapPinMain,
     formFieldset: formFieldset,
     inputAddress: inputAddress,
+    titleAd: titleAd,
     main: main,
     resetButtom: resetButtom
   };

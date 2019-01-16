@@ -81,7 +81,9 @@
     renderFilteredPins(filteredArray);
   };
 
-  mapFilters.addEventListener('change', window.utils.removeDomElement('.map__card'));
+  mapFilters.addEventListener('change', function () {
+    window.utils.removeDomElement('.map__card');
+  });
   mapFilters.addEventListener('change', window.utils.debounce(getfilterPins));
 
   window.filter = {
