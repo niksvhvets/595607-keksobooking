@@ -7,12 +7,16 @@
     window.utils.classRemove(window.validation.adForm, 'ad-form--disabled');
     window.utils.setAvailabilityForm(window.filter.mapFilters, window.constants.ENABLED_MAP_STATE);
     window.utils.setAvailabilityForm(window.itemSearch.formFieldset, window.constants.ENABLED_MAP_STATE);
+
+    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    if (mapPins.length === 0) {
+      window.pin.renderPins();
+    }
   };
 
   window.itemSearch.inputAddress.value = window.pin.getCoordinatesAddress(true);
   window.itemSearch.mapPinMain.addEventListener('mousedown', function (evt) {
-    window.pin.renderPins();
-
+    activateInterface();
     evt.preventDefault();
 
     var startCoords = {
@@ -21,7 +25,6 @@
     };
 
     var mainPinMouseMoveHandler = function (moveEvt) {
-      activateInterface();
       moveEvt.preventDefault();
 
       var shift = {

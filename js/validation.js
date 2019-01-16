@@ -120,7 +120,7 @@
 
       errorButton.removeEventListener('click', closeErrorMessage);
       document.removeEventListener('keydown', closeErrorMessage);
-      // window.utils.resetPage();
+
       adForm.reset();
     }
   };

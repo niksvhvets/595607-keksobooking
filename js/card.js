@@ -5,27 +5,28 @@
   var createFeatures = function (array) {
     var feature = document.createDocumentFragment();
 
-    for (var i = 0; i < array.length; i++) {
+    array.forEach(function (el) {
       var featuresItem = document.createElement('li');
-      featuresItem.className = 'popup__feature popup__feature--' + array[i];
+      featuresItem.className = 'popup__feature popup__feature--' + el;
       feature.appendChild(featuresItem);
-    }
+    });
+
     return feature;
   };
 
   var createPhotos = function (array) {
     var photo = document.createDocumentFragment();
 
-    for (var i = 0; i < array.length; i++) {
+    array.forEach(function (el) {
       var photoItem = document.createElement('img');
       photoItem.classList.add('popup__photo');
-      photoItem.src = array[i];
+      photoItem.src = el;
       photoItem.width = window.constants.IMAGE_WIDTH;
       photoItem.height = window.constants.IMAGE_HEIGHT;
       photoItem.alt = 'Фотография жилья';
 
       photo.appendChild(photoItem);
-    }
+    });
 
     return photo;
   };
@@ -48,18 +49,22 @@
     var popupClose = ad.querySelector('.popup__close');
 
     var popupCloseClickHandler = function () {
-      window.utils.removeDomElement('.map__card');
-      document.removeEventListener('.click', popupCloseEscButton);
+
+      var clickButtonClose = window.utils.removeDomElement('.map__card');
+      clickButtonClose();
+      document.removeEventListener('click', popupCloseEscButton);
 
       ad.addEventListener('keydown', function () {
         window.utils.removeDomElement('.map__card');
         document.removeEventListener('keydown', popupCloseEscButton);
       });
+
     };
 
     var popupCloseEscButton = function (evt) {
       if (evt.keyCode === window.constants.ESC_BUTTON) {
-        window.utils.removeDomElement('.map__card');
+        var pressEscButton = window.utils.removeDomElement('.map__card');
+        pressEscButton();
         document.removeEventListener('keydown', popupCloseEscButton);
       }
     };

@@ -8,7 +8,7 @@
   var IMAGE_WIDTH = 40;
   var IMAGE_HEIGHT = 40;
   var ADS_COUNT = 5;
-  var FILTERED_ADS_COUNT = 4;
+  var FILTERED_ADS_COUNT = 5;
   var ENABLED_MAP_STATE = false;
   var DISABLED_MAP_STATE = true;
   var ESC_BUTTON = 27;
