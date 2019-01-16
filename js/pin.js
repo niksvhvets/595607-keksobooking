@@ -15,12 +15,10 @@
     pinElement.querySelector('img').alt = element.offer.title;
 
     var pinElementClickHandler = function () {
-      if (window.itemSearch.map.querySelector('.map__card') !== null) {
-        window.utils.removeDomElement('.map__card');
-      }
       window.card.showAd(element);
     };
 
+    pinElement.addEventListener('click', window.utils.removeDomElement('.map__card'));
     pinElement.addEventListener('click', pinElementClickHandler);
 
     return pinElement;
@@ -32,10 +30,9 @@
     window.backend.load(function (response) {
       var pins = document.createDocumentFragment();
 
-      for (var i = 0; i < response.length; i++) {
-        arrayAds.push(response[i]);
-        arrayAds.slice(0, 4);
-      }
+      response.forEach(function (el) {
+        arrayAds.push(el);
+      });
       for (var j = 0; j < window.constants.ADS_COUNT; j++) {
         pins.appendChild(window.pin.createPins(response[j]));
       }

@@ -9,9 +9,10 @@
     window.utils.addClass(window.validation.adForm, 'ad-form--disabled');
     window.utils.setAvailabilityForm(window.filter.mapFilters, window.constants.DISABLED_MAP_STATE);
     window.utils.setAvailabilityForm(window.itemSearch.formFieldset, window.constants.DISABLED_MAP_STATE);
+    window.validation.adForm.reset();
     removePins();
+    removeAd();
     resetPinMainCoordinate();
-    closeOpenedPopup();
   };
 
   var resetPinMainCoordinate = function () {
@@ -31,17 +32,25 @@
   };
 
   var setAvailabilityForm = function (thatChange, state) {
-    for (var i = 0; i < thatChange.length; i++) {
-      thatChange[i].disabled = state;
-    }
+    [].forEach.call(thatChange, function (el) {
+      el.disabled = state;
+    });
   };
 
   var removeDomElement = function (element) {
-    var foundElement = window.itemSearch.map.querySelector(element);
 
-    if (foundElement) {
-      foundElement.remove();
-    }
+    return function () {
+      var foundElement = document.querySelector(element);
+
+      if (foundElement) {
+        foundElement.remove();
+      }
+    };
+  };
+
+  var removeAd = function () {
+    var ad = window.utils.removeDomElement('.map__card');
+    ad();
   };
 
   var removePins = function () {
@@ -62,13 +71,6 @@
     };
   };
 
-  var closeOpenedPopup = function () {
-    var oldCard = window.itemSearch.map.querySelector('.map__card');
-    if (oldCard) {
-      oldCard.remove();
-    }
-  };
-
   window.utils = {
     classRemove: classRemove,
     addClass: addClass,
@@ -76,7 +78,7 @@
     removeDomElement: removeDomElement,
     removePins: removePins,
     debounce: debounce,
-    closeOpenedPopup: closeOpenedPopup,
+    // closeOpenedPopup: closeOpenedPopup,
     resetPage: resetPage,
     resetPinMainCoordinate: resetPinMainCoordinate
   };
