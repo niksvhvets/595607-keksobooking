@@ -78,7 +78,6 @@
     removeDomElement: removeDomElement,
     removePins: removePins,
     debounce: debounce,
-    // closeOpenedPopup: closeOpenedPopup,
     resetPage: resetPage,
     resetPinMainCoordinate: resetPinMainCoordinate
   };
