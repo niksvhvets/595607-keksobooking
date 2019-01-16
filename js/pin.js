@@ -15,10 +15,12 @@
     pinElement.querySelector('img').alt = element.offer.title;
 
     var pinElementClickHandler = function () {
+      if (window.itemSearch.map.querySelector('.map__card') !== null) {
+        window.utils.removeDomElement('.map__card');
+      }
       window.card.showAd(element);
     };
 
-    pinElement.addEventListener('click', window.utils.removeDomElement('.map__card'));
     pinElement.addEventListener('click', pinElementClickHandler);
 
     return pinElement;
