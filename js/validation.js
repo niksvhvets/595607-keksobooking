@@ -131,7 +131,8 @@
     window.backend.upload(new FormData(adForm), uploadSuccessMessage, uploadErrorMessage);
   });
 
-  window.itemSearch.resetButtom.addEventListener('click', function () {
+  window.itemSearch.resetButtom.addEventListener('click', function (evt) {
+    evt.preventDefault();
     window.utils.resetPage();
   });
 
