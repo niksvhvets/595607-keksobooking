@@ -2,13 +2,13 @@
 
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var MAX_PHOTO = 11;
 
   var avatarChooser = document.querySelector('.ad-form__field input[type=file]');
   var avatarPreview = document.querySelector('.ad-form-header__preview img');
   var photoChooser = document.querySelector('.ad-form__upload input[type=file]');
   var photoBox = document.querySelector('.ad-form__photo-container');
-
-  var MAX_PHOTO = 11;
+  var photoPreview = document.querySelector('.ad-form__photo');
 
   avatarChooser.addEventListener('change', function () {
     var avatar = avatarChooser.files[0];
@@ -41,21 +41,24 @@
       var reader = new FileReader();
 
       reader.addEventListener('load', function () {
+        if (!photoPreview.children.length) {
+          var housePhoto = document.createElement('img');
+          housePhoto.width = 70;
+          housePhoto.height = 70;
+          housePhoto.src = reader.result;
 
-        if (photoBox.children.length < MAX_PHOTO) {
+          photoPreview.appendChild(housePhoto);
+        } else if (photoBox.children.length < MAX_PHOTO) {
           var photoContainer = document.createElement('div');
           photoContainer.classList.add('ad-form__photo');
-          var housePhoto = document.createElement('img');
+          housePhoto = document.createElement('img');
           housePhoto.width = 70;
           housePhoto.height = 70;
           housePhoto.src = reader.result;
 
           photoBox.appendChild(photoContainer);
           photoContainer.appendChild(housePhoto);
-        } else {
-          photoBox.children[1].remove();
         }
-
       });
 
       reader.readAsDataURL(photo);
